@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Form from './form.js';
 import './App.css';
+import Button from './button.js'
 
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
@@ -14,7 +15,7 @@ export default class App extends Component {
     this.state = {
       input: 0,
       recent: 0,
-      answer: 20,
+      answer: Math.floor(Math.random() * 100) + 1,
       history: [],
       currentFeedback: '',
       feedbackOptions: [{
@@ -29,17 +30,29 @@ export default class App extends Component {
       ]
     }
   }
+  gameReset() {
+    this.setState({
+      history: [],
+      currentFeedback: 'Good Luck',
+      answer: Math.floor(Math.random() * 100) + 1
+    })
+  }
   checkAnswer() {
     console.log(this.state);
     const guess = Number.parseInt(this.state.input);
     const winner = this.state.answer;
     this.state.history.push(guess);
+    const difference = Math.abs(guess - this.state.answer);
+
     this.setState({ recent: guess });
-    if (guess === winner) {
-      this.setState({ currentFeedback: this.state.feedbackOptions[2].msg })
+    if (difference >= 30) {
+      this.setState({ currentFeedback: this.state.feedbackOptions[0].msg })
     }
-    else {
-      alert('wrong answer!');
+    else if (difference >= 1) {
+      this.setState({ currentFeedback: this.state.feedbackOptions[1].msg })
+    }
+    else if (guess === winner) {
+      this.setState({ currentFeedback: this.state.feedbackOptions[2].msg })
     }
   }
   render() {
@@ -54,6 +67,8 @@ export default class App extends Component {
         </p>
         <Form changeInput={text => { this.setState({ input: text }) }}
           submitGuess={() => { this.checkAnswer() }} />
+        <p>{this.state.history.join(' ')}</p>
+        <Button reset={() => { this.gameReset() }} />
       </div>
     );
   }
