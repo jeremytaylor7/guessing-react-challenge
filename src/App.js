@@ -30,14 +30,14 @@ export default class App extends Component {
       ]
     }
   }
-  gameReset() {
+  gameReset = () => {
     this.setState({
       history: [],
       currentFeedback: 'Good Luck',
       answer: Math.floor(Math.random() * 100) + 1
     })
   }
-  checkAnswer() {
+  checkAnswer = () => {
     console.log(this.state);
     const guess = Number.parseInt(this.state.input);
     const winner = this.state.answer;
@@ -68,7 +68,7 @@ export default class App extends Component {
         <Form changeInput={text => { this.setState({ input: text }) }}
           submitGuess={() => { this.checkAnswer() }} />
         <p>{this.state.history.join(' ')}</p>
-        <Button reset={() => { this.gameReset() }} />
+        <Button reset={this.gameReset} />
       </div>
     );
   }
